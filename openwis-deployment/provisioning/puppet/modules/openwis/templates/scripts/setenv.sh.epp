@@ -9,7 +9,7 @@ export SCRIPTS_DIR=$(dirname $(realpath $0))
 export CONFIG_SRC_DIR=<%= $config_src_dir %>
 export TOUCHFILES_DIR=<%= $touchfiles_dir %>
 export WORKING_DIR=<%= $working_dir %>
-export DOWNLOADS_DIR=${WORKING_DIR}/downloads
+export DOWNLOADS_DIR=<%= $downloads_dir %>
 
 test -d ${WORKING_DIR} || mkdir -p ${WORKING_DIR}
 test -d ${DOWNLOADS_DIR} || mkdir -p ${DOWNLOADS_DIR}
