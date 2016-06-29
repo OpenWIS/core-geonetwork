@@ -23,15 +23,6 @@ class openwis::middleware::tomcat ()
     }
 
     #==============================================================================
-    # Enable & start services
-    #==============================================================================
-    service { tomcat:
-      ensure  => running,
-      enable  => true,
-      require => Package[tomcat]
-    }
-
-    #==============================================================================
     # Manage folders & links
     #==============================================================================
     file { "${tomcat_logs_dir}":
@@ -40,6 +31,16 @@ class openwis::middleware::tomcat ()
     file { "/usr/share/tomcat/logs":
         ensure  => link,
         target  => "${tomcat_logs_dir}",
-        require => Package[tomcat]
+        require => Package[tomcat],
+        notify  => Service[tomcat]
+    }
+
+    #==============================================================================
+    # Enable & start services
+    #==============================================================================
+    service { tomcat:
+      ensure  => running,
+      enable  => true,
+      require => Package[tomcat]
     }
 }
