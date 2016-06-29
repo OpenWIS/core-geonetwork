@@ -33,8 +33,12 @@ class openwis (
     #==========================================================================
     # Manage folders & links
     #==========================================================================
-    file { ["/home/openwis",
-            "${touchfiles_dir}",
+    file { "/home/openwis":
+        ensure => directory,
+        owner  => "openwis",
+        group  => "openwis"
+    } ->
+    file { ["${touchfiles_dir}",
             "${logs_root_dir}"]:
         ensure => directory,
     }
@@ -61,7 +65,8 @@ class openwis (
         content => dos2unix(epp("openwis/scripts/setenv.sh", {
             config_src_dir => $config_src_dir,
             working_dir    => $working_dir,
-            touchfiles_dir => $touchfiles_dir
+            touchfiles_dir => $touchfiles_dir,
+            downloads_dir  => $downloads_dir
         })),
         require => File["${scripts_dir}"]
     } ->
