@@ -16,6 +16,11 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder host_config['portal_workspace'], "/tmp/portal_workspace"
   config.vm.synced_folder "../provisioning", "/tmp/provisioning"
 
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 2
+  end
+
   config.vm.provision "puppet" do |vagrant|
     vagrant.manifest_file     = "vagrant.pp"
     vagrant.manifests_path    = "provisioning/manifests"
@@ -31,11 +36,6 @@ Vagrant.configure("2") do |config|
 
     db.vm.network "private_network", ip: "192.168.54.101"
 
-    db.vm.provider "virtualbox" do |vb|
-      vb.memory = 2048
-  	  vb.cpus = 2
-    end
-
     db.vm.provision "puppet" do |db|
       db.manifest_file     = "db.pp"
       db.manifests_path    = "provisioning/manifests"
@@ -43,66 +43,67 @@ Vagrant.configure("2") do |config|
       db.hiera_config_path = "provisioning/hiera.yaml"
       db.options           = "--strict_variables --parser future"
     end
+
+    # restart services to ensure that shared folders are mounted
+    db.vm.provision "shell", run: "always", inline: <<-SHELL
+      systemctl restart postgresql-9.5.service
+    SHELL
   end
 
-    #=============================================================================
-    # Data Services Server configuration
-    #=============================================================================
-    config.vm.define "data" do |data|
-      data.vm.hostname = "ow4dev-data"
+  #=============================================================================
+  # Data Services Server configuration
+  #=============================================================================
+  config.vm.define "data" do |data|
+    data.vm.hostname = "ow4dev-data"
 
-      data.vm.network "private_network", ip: "192.168.54.103"
+    data.vm.network "private_network", ip: "192.168.54.103"
 
-      # JBoss Web Access (will be disabled once everything works)
-      data.vm.network "forwarded_port", guest: 8180, host: 18180, host_ip: "localhost"
-      # JBoss Admin Console
-      data.vm.network "forwarded_port", guest: 9990, host: 19990, host_ip: "localhost"
-      # JBoss remote debug
-      data.vm.network "forwarded_port", guest: 8787, host: 18787, host_ip: "localhost"
+    # JBoss Web Access (will be disabled once everything works)
+    data.vm.network "forwarded_port", guest: 8180, host: 18180, host_ip: "localhost"
+    # JBoss Admin Console
+    data.vm.network "forwarded_port", guest: 9990, host: 19990, host_ip: "localhost"
+    # JBoss remote debug
+    data.vm.network "forwarded_port", guest: 8787, host: 18787, host_ip: "localhost"
 
-      data.vm.provider "virtualbox" do |vb|
-        vb.memory = 2048
-    	  vb.cpus = 2
-      end
-
-      data.vm.provision "puppet" do |data|
-        data.manifest_file     = "data.pp"
-        data.manifests_path    = "provisioning/manifests"
-        data.module_path       = "../provisioning/puppet/modules"
-        data.hiera_config_path = "provisioning/hiera.yaml"
-        data.options           = "--strict_variables --parser future"
-      end
-
-      # restart JBoss to ensure that shared folders are mounted
-      data.vm.provision "shell", run: "always", inline: <<-SHELL
-        systemctl restart jboss-as.service
-      SHELL
-  end
-
-    #=============================================================================
-    # Portal Server configuration
-    #=============================================================================
-    config.vm.define "portal" do |portal|
-      portal.vm.hostname = "ow4dev-portal"
-
-      portal.vm.network "private_network", ip: "192.168.54.103"
-
-      # Portal Web Access (will switch to Apache when configured)
-      portal.vm.network "forwarded_port", guest: 8080, host: 10080, host_ip: "localhost"
-      # Tomcat remote debug
-      portal.vm.network "forwarded_port", guest: 8000, host: 18000, host_ip: "localhost"
-
-      portal.vm.provider "virtualbox" do |vb|
-        vb.memory = 2048
-    	  vb.cpus = 2
-      end
-
-      portal.vm.provision "puppet" do |portal|
-        portal.manifest_file     = "portal.pp"
-        portal.manifests_path    = "provisioning/manifests"
-        portal.module_path       = "../provisioning/puppet/modules"
-        portal.hiera_config_path = "provisioning/hiera.yaml"
-        portal.options           = "--strict_variables --parser future"
-      end
+    data.vm.provision "puppet" do |data|
+      data.manifest_file     = "data.pp"
+      data.manifests_path    = "provisioning/manifests"
+      data.module_path       = "../provisioning/puppet/modules"
+      data.hiera_config_path = "provisioning/hiera.yaml"
+      data.options           = "--strict_variables --parser future"
     end
+
+    # restart services to ensure that shared folders are mounted
+    data.vm.provision "shell", run: "always", inline: <<-SHELL
+      systemctl restart jboss-as.service
+    SHELL
+  end
+
+  #=============================================================================
+  # Portal Server configuration
+  #=============================================================================
+  config.vm.define "portal" do |portal|
+    portal.vm.hostname = "ow4dev-portal"
+
+    portal.vm.network "private_network", ip: "192.168.54.103"
+
+    # Portal Web Access (will switch to Apache when configured)
+    portal.vm.network "forwarded_port", guest: 8080, host: 10080, host_ip: "localhost"
+    # Tomcat remote debug
+    portal.vm.network "forwarded_port", guest: 8000, host: 18000, host_ip: "localhost"
+
+    portal.vm.provision "puppet" do |portal|
+      portal.manifest_file     = "portal.pp"
+      portal.manifests_path    = "provisioning/manifests"
+      portal.module_path       = "../provisioning/puppet/modules"
+      portal.hiera_config_path = "provisioning/hiera.yaml"
+      portal.options           = "--strict_variables --parser future"
+    end
+
+    # restart services to ensure that shared folders are mounted
+    portal.vm.provision "shell", run: "always", inline: <<-SHELL
+    systemctl restart tomcat.service
+    systemctl restart httpd.service
+    SHELL
+  end
 end
