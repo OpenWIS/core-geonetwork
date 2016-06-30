@@ -3,7 +3,8 @@
 . $(dirname $(realpath $0))/setenv.sh
 
 # check if the touchfile exists & exit if appropriate
-test -f ${TOUCHFILES_DIR}/db-provisioned && exit
+export TOUCHFILE=${TOUCHFILES_DIR}/db-provisioned
+test -f ${TOUCHFILE} && exit
 
 export POSTGRESQL_VERSION=<%= $postgresql_version %>
 export POSTGIS_VERSION=<%= $postgis_version %>
@@ -29,4 +30,4 @@ as_postgres psql -d OpenWIS -c 'CREATE EXTENSION pgrouting;'
 as_postgres psql -f ${CONFIG_SRC_DIR}/database/openwis-roles.sql
 
 # create the touchfile to ensure that this script is only run once
-touch ${TOUCHFILES_DIR}/db-provisioned
+touch ${TOUCHFILE}

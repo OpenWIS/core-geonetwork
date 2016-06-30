@@ -42,7 +42,7 @@ class openwis::middleware::postgresql (
     #==============================================================================
     # Configure PostgreSQL, initialise database, enable & start services
     #==============================================================================
-    exec { initdb:
+    exec { "initdb":
         command => "/usr/pgsql-${postgresql_version}/bin/postgresql${postgresql_short_version}-setup initdb",
         creates => "/var/lib/pgsql/${postgresql_version}/initdb.log",
         notify  => Service["postgresql-${postgresql_version}"],

@@ -3,6 +3,8 @@ class openwis (
     $touchfiles_dir        = "/home/openwis/touchfiles",
     $logs_root_dir         = "/home/openwis/logs",
     $db_server_host_name,
+    $db_user_password      = "openwis",
+    $openwis_opt_dir       = "/var/opt/openwis"
 )
 {
     $scripts_dir    = "${provisioning_root_dir}/scripts"
@@ -33,7 +35,7 @@ class openwis (
     #==========================================================================
     # Manage folders & links
     #==========================================================================
-    file { "/home/openwis":
+    file { ["/home/openwis", "${openwis_opt_dir}"]:
         ensure => directory,
         owner  => "openwis",
         group  => "openwis"
@@ -61,7 +63,7 @@ class openwis (
     #==============================================================================
     file { "${scripts_dir}/setenv.sh":
         ensure  => file,
-        mode    => "0666",
+        mode    => "0774",
         content => dos2unix(epp("openwis/scripts/setenv.sh", {
             config_src_dir => $config_src_dir,
             working_dir    => $working_dir,
@@ -72,7 +74,7 @@ class openwis (
     } ->
     file { "${scripts_dir}/functions.sh":
         ensure  => file,
-        mode    => "0666",
+        mode    => "0774",
         content => dos2unix(epp("openwis/scripts/functions.sh"))
     }
 

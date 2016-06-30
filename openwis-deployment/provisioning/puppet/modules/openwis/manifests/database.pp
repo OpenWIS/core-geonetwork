@@ -10,6 +10,7 @@ class openwis::database ()
     $touchfiles_dir     = $openwis::touchfiles_dir
     $postgresql_version = $openwis::middleware::postgresql::postgresql_version
     $postgis_version    = $openwis::middleware::postgresql::postgis_version
+    $db_user_password   = $openwis::db_user_password
 
     #==============================================================================
     # Configure scripts
@@ -21,12 +22,13 @@ class openwis::database ()
         ensure  => file,
         content => epp("openwis/database/openwis-roles.sql", {
             postgresql_version => $postgresql_version,
-            postgis_version    => $postgis_version
+            postgis_version    => $postgis_version,
+            db_user_password   => $db_user_password
         })
     } ->
     file { "${scripts_dir}/create-db.sh":
         ensure  => file,
-        mode    => "0666",
+        mode    => "0774",
         content => dos2unix(epp("openwis/scripts/create-db.sh", {
             postgresql_version => $postgresql_version,
             postgis_version    => $postgis_version
@@ -36,9 +38,8 @@ class openwis::database ()
     #==============================================================================
     # Create database
     #==============================================================================
-    exec { create-db:
+    exec { "create-db":
         command => "${scripts_dir}/create-db.sh",
-        creates => "${touchfiles_dir}/db-provisioned",
         require => File["${scripts_dir}/create-db.sh"]
     }
 }

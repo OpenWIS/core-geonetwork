@@ -8,6 +8,9 @@ export REMOTE_PORTAL_WAR=<%= $remote_portal_war %>
 
 export WEBAPPS_FOLDER=/usr/share/tomcat/webapps
 
+# check if the portal has been deployed & exit if appropriate
+test -d ${WEBAPPS_FOLDER}/geonetwork && exit
+
 # Stop Tomcat & clear the logs folder
 as_root service tomcat stop
 as_root rm -f /usr/share/tomcat/logs/*

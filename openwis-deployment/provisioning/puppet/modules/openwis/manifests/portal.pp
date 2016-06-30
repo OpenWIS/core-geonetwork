@@ -12,6 +12,7 @@ class openwis::portal (
     $scripts_dir         = $openwis::scripts_dir
     $config_src_dir      = $openwis::config_src_dir
     $db_server_host_name = $openwis::db_server_host_name
+    $db_user_password    = $openwis::db_user_password
 
     #==============================================================================
     # Configure scripts
@@ -23,11 +24,14 @@ class openwis::portal (
     } ->
     file { "${config_src_dir}/portal/config-node/srv.xml":
         ensure  => file,
-        content => epp("openwis/portal/config-node/srv.xml")
+        content => file("openwis/portal/config-node/srv.xml")
     } ->
     file { "${config_src_dir}/portal/config-db/jdbc.properties":
         ensure  => file,
-        content => epp("openwis/portal/config-db/jdbc.properties")
+        content => epp("openwis/portal/config-db/jdbc.properties", {
+            db_server_host_name => $db_server_host_name,
+            db_user_password    => $db_user_password,
+          })
     } ->
     file { "${config_src_dir}/portal/config-db/postgres.xml":
         ensure  => file,
@@ -37,7 +41,7 @@ class openwis::portal (
     } ->
     file { "${scripts_dir}/deploy-portal.sh":
         ensure  => file,
-        mode    => "0666",
+        mode    => "0774",
         content => dos2unix(epp("openwis/scripts/deploy-portal.sh", {
             use_local_portal_war => $use_local_portal_war,
             local_portal_war     => $local_portal_war,
@@ -48,9 +52,8 @@ class openwis::portal (
     #==============================================================================
     # Deploy portal
     #==============================================================================
-    exec { deploy-portal:
+    exec { "deploy-portal":
         command => "${scripts_dir}/deploy-portal.sh",
-        creates => "/usr/share/tomcat/webapps/geonetwork",
         require => File["${scripts_dir}/deploy-portal.sh"]
     }
 }

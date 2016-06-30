@@ -20,7 +20,7 @@ class openwis::middleware::jboss_as (
   }
 
   #==============================================================================
-  # Ensure target folders exist
+  # ensure target folders exist
   #==============================================================================
   file { ["${jboss_as_dir}", "/etc/jboss-as", "/var/run/jboss-as"]:
     ensure => directory,
@@ -29,7 +29,7 @@ class openwis::middleware::jboss_as (
   }
 
   #==============================================================================
-  # Download & install JBoss-AS
+  # download & install JBoss-AS
   #==============================================================================
   exec { "download-installer":
     command => "wget ${installer_repo}/${installer_file} -O ${downloads_dir}/${installer_file}",
@@ -58,18 +58,24 @@ class openwis::middleware::jboss_as (
   } ->
   file { "/etc/jboss-as/jboss-as.conf":
     ensure  => file,
-    content => dos2unix(epp("openwis/middleware/jboss/jboss-as.conf")),
+    content => dos2unix(file("openwis/middleware/jboss/jboss-as.conf")),
+    notify  => Service["jboss-as"]
+  } ->
+  file { "${jboss_as_dir}/standalone/configuration/jboss-log4j.xml":
+    ensure  => file,
+    content => file("openwis/middleware/jboss/jboss-log4j.xml"),
     notify  => Service["jboss-as"]
   } ->
   exec { "set-http-port":
     command => 'jboss-cli.sh -c --command="/socket-binding-group="standard-sockets"/socket-binding="http":write-attribute(name="port",value=8180)"',
     creates => "${touchfiles_dir}/jboss_http_port_changed",
     path    => ["${jboss_as_dir}/bin", $::path],
-    require  => Service["jboss-as"]
+    require => Service["jboss-as"],
+    notify  => Exec["restart-jboss"]
   }
 
   #==============================================================================
-  # Manage folders & links
+  # manage folders & links
   #==============================================================================
   file { "${jboss_logs_dir}":
     ensure  => directory,
@@ -86,11 +92,20 @@ class openwis::middleware::jboss_as (
     notify => Service[jboss-as]
   }
 
-  #==============================================================================
-  # Enable & start services
-  #==============================================================================
-  service { "jboss-as":
-    ensure => running,
-    enable => true
-  }
+    #==============================================================================
+    # enable & start services
+    #==============================================================================
+    service { "jboss-as":
+      ensure => running,
+      enable => true
+    }
+
+    #==============================================================================
+    # re-start services
+    #==============================================================================
+    exec { "restart-jboss":
+      command     => 'service jboss-as restart',
+      user        => "root",
+      refreshonly => true
+    }
 }
