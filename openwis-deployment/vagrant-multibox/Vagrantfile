@@ -21,11 +21,11 @@ Vagrant.configure("2") do |config|
     vb.cpus = 2
   end
 
-  config.vm.provision "puppet" do |vagrant|
-    vagrant.manifest_file     = "vagrant.pp"
-    vagrant.manifests_path    = "provisioning/manifests"
-    vagrant.hiera_config_path = "provisioning/hiera.yaml"
-    vagrant.options           = "--strict_variables --parser future"
+  config.vm.provision "puppet" do |vagrant_common|
+    vagrant_common.manifest_file     = "vagrant-common.pp"
+    vagrant_common.manifests_path    = "provisioning/manifests"
+    vagrant_common.hiera_config_path = "provisioning/hiera.yaml"
+    vagrant_common.options           = "--strict_variables --parser future"
   end
 
   #=============================================================================
@@ -35,6 +35,16 @@ Vagrant.configure("2") do |config|
     db.vm.hostname = "ow4dev-db"
 
     db.vm.network "private_network", ip: "192.168.54.101"
+
+    # PostgreSQL port
+    db.vm.network "forwarded_port", guest: 5432, host: 15432, host_ip: "localhost"
+
+    config.vm.provision "puppet" do |vagrant_db|
+      vagrant_db.manifest_file     = "vagrant-db.pp"
+      vagrant_db.manifests_path    = "provisioning/manifests"
+      vagrant_db.hiera_config_path = "provisioning/hiera.yaml"
+      vagrant_db.options           = "--strict_variables --parser future"
+    end
 
     db.vm.provision "puppet" do |db|
       db.manifest_file     = "db.pp"
@@ -65,6 +75,13 @@ Vagrant.configure("2") do |config|
     # JBoss remote debug
     data.vm.network "forwarded_port", guest: 8787, host: 18787, host_ip: "localhost"
 
+    config.vm.provision "puppet" do |vagrant_data|
+      vagrant_data.manifest_file     = "vagrant-data.pp"
+      vagrant_data.manifests_path    = "provisioning/manifests"
+      vagrant_data.hiera_config_path = "provisioning/hiera.yaml"
+      vagrant_data.options           = "--strict_variables --parser future"
+    end
+
     data.vm.provision "puppet" do |data|
       data.manifest_file     = "data.pp"
       data.manifests_path    = "provisioning/manifests"
@@ -92,6 +109,13 @@ Vagrant.configure("2") do |config|
     # Tomcat remote debug
     portal.vm.network "forwarded_port", guest: 8000, host: 18000, host_ip: "localhost"
 
+    config.vm.provision "puppet" do |vagrant_portal|
+      vagrant_portal.manifest_file     = "vagrant-portal.pp"
+      vagrant_portal.manifests_path    = "provisioning/manifests"
+      vagrant_portal.hiera_config_path = "provisioning/hiera.yaml"
+      vagrant_portal.options           = "--strict_variables --parser future"
+    end
+
     portal.vm.provision "puppet" do |portal|
       portal.manifest_file     = "portal.pp"
       portal.manifests_path    = "provisioning/manifests"
@@ -102,8 +126,8 @@ Vagrant.configure("2") do |config|
 
     # restart services to ensure that shared folders are mounted
     portal.vm.provision "shell", run: "always", inline: <<-SHELL
-    systemctl restart tomcat.service
-    systemctl restart httpd.service
+      systemctl restart tomcat.service
+      systemctl restart httpd.service
     SHELL
   end
 end

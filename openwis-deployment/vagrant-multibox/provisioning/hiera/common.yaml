@@ -1,11 +1,9 @@
 ---
 openwis::provisioning_root_dir: /vagrant/provisioning
-openwis::touchfiles_dir:        /home/vagrant/touchfiles
-openwis::logs_root_dir:         /vagrant/logs
-openwis::openwis_opt_dir:       /vagrant/openwis
+openwis::touch_files_dir:       /home/vagrant/touchfiles
 
 openwis::portal::use_local_portal_war: true
-openwis::portal::local_portal_war:     /tmp/portal_workspace/web/target/geonetwork.war
+openwis::portal::source_portal_war:    /tmp/portal_workspace/web/target/geonetwork.war
 
 openwis::db_server_host_name:     ow4dev-db
 openwis::data_server_host_name:   ow4dev-data

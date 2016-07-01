@@ -1,0 +1,2 @@
+openwis::logs_root_dir:   /vagrant/ow4dev-db/logs
+openwis::openwis_opt_dir: /vagrant/ow4dev-db/openwis
