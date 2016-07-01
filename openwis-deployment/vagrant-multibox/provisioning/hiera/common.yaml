@@ -8,3 +8,6 @@ openwis::portal::source_portal_war:    /tmp/portal_workspace/web/target/geonetwo
 openwis::db_server_host_name:     ow4dev-db
 openwis::data_server_host_name:   ow4dev-data
 openwis::portal_server_host_name: ow4dev-portal
+
+openwis::data_services_base_url:       http://ow4dev-data:8180
+openwis::management_services_base_url: http://ow4dev-data:8180

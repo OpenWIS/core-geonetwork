@@ -1,10 +1,12 @@
 class openwis (
-    $provisioning_root_dir = "/tmp/provisioning",
-    $touch_files_dir       = "/home/openwis/touchfiles",
-    $logs_root_dir         = "/home/openwis/logs",
+    $provisioning_root_dir        = "/tmp/provisioning",
+    $touch_files_dir              = "/home/openwis/touchfiles",
+    $logs_root_dir                = "/home/openwis/logs",
     $db_server_host_name,
-    $db_user_password      = "openwis",
-    $openwis_opt_dir       = "/var/opt/openwis"
+    $db_user_password             = "openwis",
+    $openwis_opt_dir              = "/var/opt/openwis",
+    $data_services_base_url       = "http://localhost:8180",
+    $management_services_base_url = "http://localhost:8180"
 )
 {
     $scripts_dir      = "${provisioning_root_dir}/scripts"
@@ -16,7 +18,7 @@ class openwis (
     # default attributes
     File {
       owner => "openwis",
-      group => "openwis"
+      group => "openwis",
     }
 
     #==========================================================================
