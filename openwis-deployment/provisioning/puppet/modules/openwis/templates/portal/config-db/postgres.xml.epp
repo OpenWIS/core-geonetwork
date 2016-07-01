@@ -15,7 +15,7 @@
     </bean>
 
     <bean id="jdbcURL" class="java.lang.String">
-        <constructor-arg value="jdbc:postgresql://<%= $db_server_host_name %>:5432/OpenWIS"/>
+        <constructor-arg value="jdbc:postgresql://<%= $db_server_host_name %>:5432/GeoNetwork"/>
     </bean>
 
 </beans>

@@ -1,6 +1,6 @@
 class openwis::middleware::httpd ()
 {
-    include openwis
+    require openwis
 
     #==============================================================================
     # Install Required packages

@@ -1,7 +1,7 @@
 jdbc.username=openwis
-jdbc.password=openwis
-jdbc.database=OpenWIS
-jdbc.host=localhost
+jdbc.password=<%= $db_user_password %>
+jdbc.database=GeoNetwork
+jdbc.host=<%= $db_server_host_name %>
 jdbc.port=5432
 jdbc.basic.removeAbandoned=true
 jdbc.basic.removeAbandonedTimeout=120

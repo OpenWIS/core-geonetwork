@@ -1,3 +1,6 @@
 /config.yaml
 /.vagrant
 /logs
+/ow4dev-data
+/ow4dev-db
+/ow4dev-portal

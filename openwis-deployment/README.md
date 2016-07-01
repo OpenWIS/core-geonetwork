@@ -133,7 +133,7 @@ The following table lists the available configuration parameters, along with the
 | ----------------------------------------------------- | ------------------- | ------------------------- | -----------
 | ** Common Configuration **                            |                     |                           |
 | `openwis::provisioning_root_dir`                      |                     | /tmp/provisioning         | The base folder used as a _working area_ by the Puppet provisioning scripts
-| `openwis::touchfiles_dir`                             |                     | /home/openwis/touchfiles  | The folder that will hold 'touch files', used by the Puppet scripts & schell scripts to ensure that certain scripts/commands are only executed once
+| `openwis::touch_files_dir`                            |                     | /home/openwis/touchfiles  | The folder that will hold 'touch files', used by the Puppet scripts & schell scripts to ensure that certain scripts/commands are only executed once
 | `openwis::logs_root_dir`                              |                     | /home/openwis/logs        | The root folder where the various log files will be written.  Re-configuring the various compoents to log to the same locations should simplify support/debugging/investigation
 | ** Portal Specific Configuration **                   |                     |                           |
 | `openwis::portal::use_local_portal_war`               |                     | false                     | Whether use a locally built portal WAR file

@@ -2,8 +2,9 @@
 :backends:
   - yaml
 
-:hierarchy:
-  - "common"
-
 :yaml:
   :datadir: '/vagrant/provisioning/hiera'
+
+:hierarchy:
+  - '%{::hostname}'
+  - common
