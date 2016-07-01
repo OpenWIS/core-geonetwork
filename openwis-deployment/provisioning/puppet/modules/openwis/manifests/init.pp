@@ -1,16 +1,23 @@
 class openwis (
     $provisioning_root_dir = "/tmp/provisioning",
-    $touchfiles_dir        = "/home/openwis/touchfiles",
+    $touch_files_dir       = "/home/openwis/touchfiles",
     $logs_root_dir         = "/home/openwis/logs",
     $db_server_host_name,
     $db_user_password      = "openwis",
     $openwis_opt_dir       = "/var/opt/openwis"
 )
 {
-    $scripts_dir    = "${provisioning_root_dir}/scripts"
-    $config_src_dir = "${provisioning_root_dir}/config"
-    $working_dir    = "${provisioning_root_dir}/working"
-    $downloads_dir  = "${provisioning_root_dir}/downloads"
+    $scripts_dir      = "${provisioning_root_dir}/scripts"
+    $config_src_dir   = "${provisioning_root_dir}/config"
+    $working_dir      = "${provisioning_root_dir}/working"
+    $downloads_dir    = "${provisioning_root_dir}/downloads"
+    $openwis_logs_dir = "${logs_root_dir}/openwis"
+
+    # default attributes
+    File {
+      owner => "openwis",
+      group => "openwis"
+    }
 
     #==========================================================================
     # Install common utility packages
@@ -40,8 +47,7 @@ class openwis (
         owner  => "openwis",
         group  => "openwis"
     } ->
-    file { ["${touchfiles_dir}",
-            "${logs_root_dir}"]:
+    file { ["${touch_files_dir}", "${logs_root_dir}", "${openwis_logs_dir}"]:
         ensure => directory,
     }
 
@@ -67,7 +73,6 @@ class openwis (
         content => dos2unix(epp("openwis/scripts/setenv.sh", {
             config_src_dir => $config_src_dir,
             working_dir    => $working_dir,
-            touchfiles_dir => $touchfiles_dir,
             downloads_dir  => $downloads_dir
         })),
         require => File["${scripts_dir}"]

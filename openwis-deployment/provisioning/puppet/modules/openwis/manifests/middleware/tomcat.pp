@@ -1,6 +1,6 @@
 class openwis::middleware::tomcat ()
 {
-    include openwis
+    require openwis
 
     $tomcat_logs_dir  = "${openwis::logs_root_dir}/tomcat"
 

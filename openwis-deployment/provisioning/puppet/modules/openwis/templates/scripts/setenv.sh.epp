@@ -7,7 +7,6 @@ set -o nounset
 export SCRIPTS_DIR=$(dirname $(realpath $0))
 
 export CONFIG_SRC_DIR=<%= $config_src_dir %>
-export TOUCHFILES_DIR=<%= $touchfiles_dir %>
 export WORKING_DIR=<%= $working_dir %>
 export DOWNLOADS_DIR=<%= $downloads_dir %>
 

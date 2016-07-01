@@ -1,6 +1,6 @@
 ---
 openwis::provisioning_root_dir: /vagrant/provisioning
-openwis::touchfiles_dir:        /home/vagrant/touchfiles
+openwis::touch_files_dir:       /home/vagrant/touchfiles
 openwis::logs_root_dir:         /vagrant/logs
 
 openwis::portal::use_local_portal_war: true

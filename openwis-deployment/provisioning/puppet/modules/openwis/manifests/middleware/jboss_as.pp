@@ -3,18 +3,23 @@ class openwis::middleware::jboss_as (
   $installer_file = "jboss-as-7.1.1.Final.tar.gz",
 )
 {
-  include openwis
   include openwis::common::systemd
 
+  require openwis
   require openwis::middleware::java
 
   $downloads_dir  = $openwis::downloads_dir
   $jboss_as_dir   = "/usr/share/jboss-as"
   $jboss_logs_dir = "${openwis::logs_root_dir}/jboss"
-  $touchfiles_dir = $openwis::touchfiles_dir
+  $touch_files_dir = $openwis::touch_files_dir
 
+  # default attributes
+  File {
+    owner => "openwis",
+    group => "openwis",
+  }
   Exec {
-    user    => "openwis",
+    user    => "root",
     timeout => 0,
     path    => $::path
   }
@@ -37,6 +42,7 @@ class openwis::middleware::jboss_as (
   } ->
   exec { "unpack-installer":
     command => "tar -xvzf ${downloads_dir}/${installer_file} -C ${jboss_as_dir} --strip-components 1",
+    user    => "openwis",
     creates => "${jboss_as_dir}/LICENSE.txt",
     require => File["${jboss_as_dir}"]
   } ->
@@ -68,7 +74,7 @@ class openwis::middleware::jboss_as (
   } ->
   exec { "set-http-port":
     command => 'jboss-cli.sh -c --command="/socket-binding-group="standard-sockets"/socket-binding="http":write-attribute(name="port",value=8180)"',
-    creates => "${touchfiles_dir}/jboss_http_port_changed",
+    unless => "grep 8180 ${jboss_as_dir}/standalone/configuration/standalone-full.xml",
     path    => ["${jboss_as_dir}/bin", $::path],
     require => Service["jboss-as"],
     notify  => Exec["restart-jboss"]
@@ -105,7 +111,6 @@ class openwis::middleware::jboss_as (
     #==============================================================================
     exec { "restart-jboss":
       command     => 'service jboss-as restart',
-      user        => "root",
       refreshonly => true
     }
 }

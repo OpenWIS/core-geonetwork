@@ -2,40 +2,27 @@
 
 . $(dirname $(realpath $0))/setenv.sh
 
-export USE_LOCAL_PORTAL_WAR=<%= $use_local_portal_war %>
-export LOCAL_PORTAL_WAR=<%= $local_portal_war %>
-export REMOTE_PORTAL_WAR=<%= $remote_portal_war %>
+export SOURCE_PORTAL_WAR=<%= $source_portal_war %>
+export PORTAL_WAR_FILE=${SOURCE_PORTAL_WAR##*/}
 
 export WEBAPPS_FOLDER=/usr/share/tomcat/webapps
-
-# check if the portal has been deployed & exit if appropriate
-test -d ${WEBAPPS_FOLDER}/geonetwork && exit
+export PORTAL_WEBAPP_FOLDER=${WEBAPPS_FOLDER}/${PORTAL_WAR_FILE%.*}
 
 # Stop Tomcat & clear the logs folder
-as_root service tomcat stop
+as_root systemctl stop tomcat.service
 as_root rm -f /usr/share/tomcat/logs/*
 
 # get the portal WAR file (local or remote, as appropriate)
-if [ "${USE_LOCAL_PORTAL_WAR}" == "true" ]
-then
-	echo 'Deploying locally built geonetwork.war'
-	cp ${LOCAL_PORTAL_WAR} ${DOWNLOADS_DIR}/geonetwork.war
-else
-	echo 'Deploying geonetwork.war from remote repository'
-	if [ ! -f ${DOWNLOADS_DIR}/geonetwork.war ]
-	then
-		wget ${REMOTE_PORTAL_WAR} -O ${DOWNLOADS_DIR}/geonetwork.war
-	fi
-fi
+get_file ${SOURCE_PORTAL_WAR} no-overwrite
 
 # remove the web app folder
-test -d ${WEBAPPS_FOLDER}/geonetwork && as_root rm -rf ${WEBAPPS_FOLDER}/geonetwork
+test -d ${PORTAL_WEBAPP_FOLDER} && as_root rm -rf ${PORTAL_WEBAPP_FOLDER}
 
 # deploy & configure the web app
-as_root unzip -q ${DOWNLOADS_DIR}/geonetwork.war -d ${WEBAPPS_FOLDER}/geonetwork
-as_root cp ${CONFIG_SRC_DIR}/portal/config-db/* ${WEBAPPS_FOLDER}/geonetwork/WEB-INF/config-db/
-as_root cp ${CONFIG_SRC_DIR}/portal/config-node/* ${WEBAPPS_FOLDER}/geonetwork/WEB-INF/config-node/
-as_root chown -R tomcat: ${WEBAPPS_FOLDER}/geonetwork
+as_tomcat unzip -q ${DOWNLOADS_DIR}/${PORTAL_WAR_FILE} -d ${PORTAL_WEBAPP_FOLDER}
+
+as_tomcat cp ${CONFIG_SRC_DIR}/portal/config-db/* ${PORTAL_WEBAPP_FOLDER}/WEB-INF/config-db/
+as_tomcat cp ${CONFIG_SRC_DIR}/portal/config-node/* ${PORTAL_WEBAPP_FOLDER}/WEB-INF/config-node/
 
 # (re)start Tomcat
-as_root service tomcat start
+as_root systemctl start tomcat.service
