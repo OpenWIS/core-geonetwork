@@ -1,8 +1,8 @@
 class openwis::data_services (
-  $source_config_module         = "http://repository-openwis-association.forge.cloudbees.com/openwis/3.14.5/openwis-dataservice-config-module.zip",
-  $source_managementservice_ear = "http://repository-openwis-association.forge.cloudbees.com/openwis/3.14.5/openwis-management-service.ear",
-  $source_dataservice_ear       = "http://repository-openwis-association.forge.cloudbees.com/openwis/3.14.5/openwis-dataservice.ear",
-  $source_jdbc_driver_jar       = "http://repository-openwis-association.forge.cloudbees.com/private/binaries/postgresql-9.2-1004.jdbc41.jar",
+  $source_config_module,
+  $source_managementservice_ear,
+  $source_dataservice_ear,
+  $source_jdbc_driver_jar,
   $staging_post_public_addr     = "http://staging_post_public_addr/not-set",
   $dissemination_wsdl_url       = undef,
   $admin_email                  = "admin@openwis.io",

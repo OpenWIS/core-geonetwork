@@ -1,9 +1,11 @@
 ---
-openwis::provisioning_root_dir: /vagrant/provisioning
-openwis::touch_files_dir:       /home/vagrant/touchfiles
+openwis::touch_files_dir: /home/vagrant/touchfiles
 
-openwis::portal::use_local_portal_war: true
-openwis::portal::source_portal_war:    /tmp/portal_workspace/web/target/geonetwork.war
+openwis::data_services::source_config_module:         http://repository-openwis-association.forge.cloudbees.com/openwis/3.14.5/openwis-dataservice-config-module.zip
+openwis::data_services::source_managementservice_ear: http://repository-openwis-association.forge.cloudbees.com/openwis/3.14.5/openwis-management-service.ear
+openwis::data_services::source_dataservice_ear:       http://repository-openwis-association.forge.cloudbees.com/openwis/3.14.5/openwis-dataservice.ear
+openwis::data_services::source_jdbc_driver_jar:       http://repository-openwis-association.forge.cloudbees.com/private/binaries/postgresql-9.2-1004.jdbc41.jar
+openwis::portal::source_portal_war:                   /tmp/portal_workspace/web/target/geonetwork.war
 
 openwis::db_server_host_name:     ow4dev-db
 openwis::data_server_host_name:   ow4dev-data

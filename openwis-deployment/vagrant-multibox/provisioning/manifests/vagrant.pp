@@ -11,12 +11,11 @@ file {["/vagrant/provisioning/config",
 	force => true
 }
 
-# create symlinks to the deployment scripts in the vagrant user's bin folders
-# so that they can be executed manually
-file {["/home/vagrant/bin"]:
-    ensure => directory,
-    owner  => "vagrant",
-    group  => "vagrant",
+# configure 'vagrant' user's 'bin' folder & shell script links
+file {"/home/vagrant/bin":
+  ensure => directory,
+  owner  => "vagrant",
+  group  => "vagrant",
 } ->
 link_script { "initialise-db":
 } ->
@@ -29,15 +28,21 @@ link_script { "deploy-managementservices":
 link_script { "deploy-portal":
 }
 
-# add the 'vagrant' user to the 'openwis' group
-# this is needed to allow the vagrant user to access openwis files
-user { "vagrant":
-	groups  => "openwis",
+# configure the host files, so that the boxes can see each other
+host { "ow4dev-db":
+	ensure => present,
+	ip     => "192.168.54.101"
+}
+host { "ow4dev-data":
+	ensure => present,
+	ip     => "192.168.54.102"
+}
+host { "ow4dev-portal":
+	ensure => present,
+	ip     => "192.168.54.103"
 }
 
-# clear down the logs folders & re-start the corresponding services (where appropriate)
-# this is needed as the logs get written to vagrant shared folders, but the services
-# get auto-started before the folders are mounted.
+# clear logs & re-start services
 clear_logs { "jboss-as":
 	logs_folders => ["/home/openwis/logs/jboss", "/home/openwis/logs/openwis"]
 } ->

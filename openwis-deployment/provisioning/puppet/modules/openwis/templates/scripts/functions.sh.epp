@@ -60,7 +60,7 @@ function get_file() {
 
 	if [[ ${SOURCE_FILE} == http* || ${SOURCE_FILE} == ftp* ]]
 	then
-		if [ ${OVERWRITE} != "no-overwrite" ]
+		if [[] ${OVERWRITE} != "no-overwrite" || ! -f ${DEST_FILE} ]]
 		then
 			wget ${SOURCE_FILE} -O ${DEST_FILE}
 		fi

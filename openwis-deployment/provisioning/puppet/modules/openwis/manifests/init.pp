@@ -1,5 +1,4 @@
 class openwis (
-    $provisioning_root_dir        = "/tmp/provisioning",
     $touch_files_dir              = "/home/openwis/touchfiles",
     $logs_root_dir                = "/home/openwis/logs",
     $db_server_host_name,
@@ -9,11 +8,12 @@ class openwis (
     $management_services_base_url = "http://localhost:8180"
 )
 {
-    $scripts_dir      = "${provisioning_root_dir}/scripts"
-    $config_src_dir   = "${provisioning_root_dir}/config"
-    $working_dir      = "${provisioning_root_dir}/working"
-    $downloads_dir    = "${provisioning_root_dir}/downloads"
-    $openwis_logs_dir = "${logs_root_dir}/openwis"
+    $provisioning_root_dir = "/tmp/provisioning"
+    $scripts_dir           = "${provisioning_root_dir}/scripts"
+    $config_src_dir        = "${provisioning_root_dir}/config"
+    $working_dir           = "${provisioning_root_dir}/working"
+    $downloads_dir         = "${provisioning_root_dir}/downloads"
+    $openwis_logs_dir      = "${logs_root_dir}/openwis"
 
     # default attributes
     File {
@@ -47,23 +47,21 @@ class openwis (
     file { ["/home/openwis", "${openwis_opt_dir}"]:
         ensure => directory,
         owner  => "openwis",
-        group  => "openwis"
+        group  => "openwis",
+        mode   => "0770"
     } ->
     file { ["${touch_files_dir}", "${logs_root_dir}", "${openwis_logs_dir}"]:
         ensure => directory,
     }
 
-    $dirtree = dirtree("${provisioning_root_dir}")
-    ensure_resource(file, $dirtree, {
-        ensure => directory
-    })
-
-    file { ["${scripts_dir}",
+    file { ["${provisioning_root_dir}",
+            "${scripts_dir}",
             "${config_src_dir}",
             "${working_dir}",
             "${downloads_dir}"]:
         ensure  => directory,
-        require => File["${provisioning_root_dir}"]
+        owner  => "root",
+        group  => "root"
     }
 
     #==============================================================================

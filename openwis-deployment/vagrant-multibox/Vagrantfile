@@ -13,19 +13,26 @@ Vagrant.configure("2") do |config|
   #=============================================================================
   # Common configuration
   #=============================================================================
-  config.vm.synced_folder host_config['portal_workspace'], "/tmp/portal_workspace"
-  config.vm.synced_folder "../provisioning", "/tmp/provisioning"
-
   config.vm.provider "virtualbox" do |vb|
     vb.memory = 2048
     vb.cpus = 2
   end
 
-  config.vm.provision "puppet" do |vagrant_common|
-    vagrant_common.manifest_file     = "vagrant-common.pp"
+  config.vm.synced_folder host_config['openwis_workspace'], "/tmp/openwis_workspace"
+
+  config.vm.provision "puppet", run: "always" do |vagrant_common|
+    vagrant_common.manifest_file     = "vagrant.pp"
     vagrant_common.manifests_path    = "provisioning/manifests"
     vagrant_common.hiera_config_path = "provisioning/hiera.yaml"
     vagrant_common.options           = "--strict_variables --parser future"
+  end
+
+  config.vm.provision "puppet" do |openwis|
+    openwis.manifest_file     = "openwis.pp"
+    openwis.manifests_path    = "provisioning/manifests"
+    openwis.module_path       = "../provisioning/puppet/modules"
+    openwis.hiera_config_path = "provisioning/hiera.yaml"
+    openwis.options           = "--strict_variables --parser future"
   end
 
   #=============================================================================
@@ -39,25 +46,8 @@ Vagrant.configure("2") do |config|
     # PostgreSQL port
     db.vm.network "forwarded_port", guest: 5432, host: 15432, host_ip: "localhost"
 
-    config.vm.provision "puppet" do |vagrant_db|
-      vagrant_db.manifest_file     = "vagrant-db.pp"
-      vagrant_db.manifests_path    = "provisioning/manifests"
-      vagrant_db.hiera_config_path = "provisioning/hiera.yaml"
-      vagrant_db.options           = "--strict_variables --parser future"
-    end
-
-    db.vm.provision "puppet" do |db|
-      db.manifest_file     = "db.pp"
-      db.manifests_path    = "provisioning/manifests"
-      db.module_path       = "../provisioning/puppet/modules"
-      db.hiera_config_path = "provisioning/hiera.yaml"
-      db.options           = "--strict_variables --parser future"
-    end
-
-    # restart services to ensure that shared folders are mounted
-    db.vm.provision "shell", run: "always", inline: <<-SHELL
-      systemctl restart postgresql-9.5.service
-    SHELL
+    db.vm.synced_folder "ow4dev-db/logs", "/home/openwis/logs", create: true, owner: "openwis", group: "openwis"
+    db.vm.synced_folder "ow4dev-db/openwis", "/var/opt/openwis", create: true, owner: "openwis", group: "openwis"
   end
 
   #=============================================================================
@@ -75,25 +65,8 @@ Vagrant.configure("2") do |config|
     # JBoss remote debug
     data.vm.network "forwarded_port", guest: 8787, host: 18787, host_ip: "localhost"
 
-    config.vm.provision "puppet" do |vagrant_data|
-      vagrant_data.manifest_file     = "vagrant-data.pp"
-      vagrant_data.manifests_path    = "provisioning/manifests"
-      vagrant_data.hiera_config_path = "provisioning/hiera.yaml"
-      vagrant_data.options           = "--strict_variables --parser future"
-    end
-
-    data.vm.provision "puppet" do |data|
-      data.manifest_file     = "data.pp"
-      data.manifests_path    = "provisioning/manifests"
-      data.module_path       = "../provisioning/puppet/modules"
-      data.hiera_config_path = "provisioning/hiera.yaml"
-      data.options           = "--strict_variables --parser future"
-    end
-
-    # restart services to ensure that shared folders are mounted
-    data.vm.provision "shell", run: "always", inline: <<-SHELL
-      systemctl restart jboss-as.service
-    SHELL
+    data.vm.synced_folder "ow4dev-data/logs", "/home/openwis/logs", create: true, owner: "openwis", group: "openwis"
+    data.vm.synced_folder "ow4dev-data/openwis", "/var/opt/openwis", create: true, owner: "openwis", group: "openwis"
   end
 
   #=============================================================================
@@ -109,25 +82,8 @@ Vagrant.configure("2") do |config|
     # Tomcat remote debug
     portal.vm.network "forwarded_port", guest: 8000, host: 18000, host_ip: "localhost"
 
-    config.vm.provision "puppet" do |vagrant_portal|
-      vagrant_portal.manifest_file     = "vagrant-portal.pp"
-      vagrant_portal.manifests_path    = "provisioning/manifests"
-      vagrant_portal.hiera_config_path = "provisioning/hiera.yaml"
-      vagrant_portal.options           = "--strict_variables --parser future"
-    end
-
-    portal.vm.provision "puppet" do |portal|
-      portal.manifest_file     = "portal.pp"
-      portal.manifests_path    = "provisioning/manifests"
-      portal.module_path       = "../provisioning/puppet/modules"
-      portal.hiera_config_path = "provisioning/hiera.yaml"
-      portal.options           = "--strict_variables --parser future"
-    end
-
-    # restart services to ensure that shared folders are mounted
-    portal.vm.provision "shell", run: "always", inline: <<-SHELL
-      systemctl restart tomcat.service
-      systemctl restart httpd.service
-    SHELL
+    portal.vm.synced_folder host_config['portal_workspace'], "/tmp/portal_workspace"
+    portal.vm.synced_folder "ow4dev-portal/logs", "/home/openwis/logs", create: true, owner: "openwis", group: "openwis"
+    portal.vm.synced_folder "ow4dev-portal/openwis", "/var/opt/openwis", create: true, owner: "openwis", group: "openwis"
   end
 end

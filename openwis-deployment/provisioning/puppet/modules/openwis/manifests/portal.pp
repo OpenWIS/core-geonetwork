@@ -1,5 +1,5 @@
 class openwis::portal (
-    $source_portal_war = undef
+    $source_portal_war
 )
 {
   require openwis

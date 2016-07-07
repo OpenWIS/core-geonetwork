@@ -20,6 +20,7 @@ wait_for_service http://localhost:9999
 #===============================================================================
 get_file ${SOURCE_CONFIG_MODULE} overwrite
 CONFIG_MODULE_FILE=${SOURCE_CONFIG_MODULE##*/}
+test -d ${JBOSS_AS_DIR}/modules/org/openwis/dataservice/config && rm -rf ${JBOSS_AS_DIR}/modules/org/openwis/dataservice/config
 as_openwis unzip -q ${DOWNLOADS_DIR}/${CONFIG_MODULE_FILE} -d ${JBOSS_AS_DIR}/modules
 
 #===============================================================================
@@ -42,7 +43,7 @@ wait_for_service http://localhost:9999
 #===============================================================================
 # run the OpenWIS JBoss configuration script
 #===============================================================================
-jboss_cli -c -c --file=${SCRIPTS_DIR}/configure-jboss.cli
+jboss_cli -c --file=${SCRIPTS_DIR}/configure-jboss.cli
 
 # create the touchfile to ensure that this script is only run once
 touch_file ${TOUCH_FILE} "JBoss configured for OpenWIS"

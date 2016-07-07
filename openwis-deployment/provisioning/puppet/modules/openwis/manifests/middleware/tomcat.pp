@@ -12,6 +12,15 @@ class openwis::middleware::tomcat ()
     }
 
     #==============================================================================
+    # Add the 'tomcat' user to the 'openwis' group
+    #==============================================================================
+    user { "tomcat":
+      groups  => "openwis",
+      shell   => "/sbin/nologin",
+      require => [Package["tomcat"], Group["openwis"]]
+    }
+
+    #==============================================================================
     # Configure tomcat
     #==============================================================================
     # enable remote debug
@@ -31,6 +40,13 @@ class openwis::middleware::tomcat ()
     file { "/usr/share/tomcat/logs":
         ensure  => link,
         target  => "${tomcat_logs_dir}",
+        require => Package[tomcat],
+        notify  => Service[tomcat]
+    } ->
+    file { "/var/log/tomcat":
+        ensure  => link,
+        target  => "${tomcat_logs_dir}",
+        force   => true,
         require => Package[tomcat],
         notify  => Service[tomcat]
     }
