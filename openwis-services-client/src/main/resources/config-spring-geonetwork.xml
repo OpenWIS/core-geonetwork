@@ -103,7 +103,7 @@
 		<property name="marshaller" ref="cacheMarshaller" />
 		<property name="unmarshaller" ref="cacheMarshaller" />
 		<property name="defaultUri"
-			value="${openwis.data_services_base_url}/openwis-dataservice-cache-ejb/CacheIndex" />
+			value="${openwis.data_services_base_url}/openwis-dataservice-cache-ejb/CacheIndexWebService?wsdl" />
 	</bean>
 
 	<bean id="blackListWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -111,7 +111,7 @@
 		<property name="marshaller" ref="blacklistMarshaller" />
 		<property name="unmarshaller" ref="blacklistMarshaller" />
 		<property name="defaultUri"
-			value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/BlacklistService" />
+			value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/BlacklistService/BlacklistService?wsdl" />
 	</bean>
 
 	<bean id="productWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -119,7 +119,7 @@
 		<property name="marshaller" ref="productmarshaller" />
 		<property name="unmarshaller" ref="productmarshaller" />
 		<property name="defaultUri"
-			value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/ProductMetadataService" />
+			value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/ProductMetadataService/ProductMetadataService?wsdl" />
 	</bean>
 
     <bean id="subscriptionWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -127,7 +127,7 @@
         <property name="marshaller" ref="subscriptionmarshaller" />
         <property name="unmarshaller" ref="subscriptionmarshaller" />
         <property name="defaultUri"
-            value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/SubscriptionService" />
+            value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/SubscriptionService/SubscriptionService?wsdl" />
     </bean>
 
     <bean id="requestWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -135,7 +135,7 @@
         <property name="marshaller" ref="requestmarshaller" />
         <property name="unmarshaller" ref="requestmarshaller" />
         <property name="defaultUri"
-            value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/RequestService" />
+            value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/RequestService/RequestService?wsdl" />
     </bean>
 
     <bean id="processedRequestWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -143,7 +143,7 @@
         <property name="marshaller" ref="processedRequestmarshaller" />
         <property name="unmarshaller" ref="processedRequestmarshaller" />
         <property name="defaultUri"
-            value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/ProcessedRequestService" />
+            value="${openwis.data_services_base_url}/openwis-dataservice-server-ejb/ProcessedRequestService/ProcessedRequestService?wsdl" />
     </bean>
 
 	<bean id="disseminatedDataStatisticsWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -151,7 +151,7 @@
 		<property name="marshaller" ref="disseminatedDataStatisticsMarshaller" />
 		<property name="unmarshaller" ref="disseminatedDataStatisticsMarshaller" />
 		<property name="defaultUri"
-			value="${openwis.data_services_base_url}/openwis-management-service-ejb/DisseminatedDataStatistics" />
+			value="${openwis.data_services_base_url}/openwis-management-service-ejb/DisseminatedDataStatistics/DisseminatedDataStatistics?wsdl" />
 	</bean>
 
 	<bean id="exchangedDataStatisticsWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -159,7 +159,7 @@
 		<property name="marshaller" ref="exchangedDataStatisticsMarshaller" />
 		<property name="unmarshaller" ref="exchangedDataStatisticsMarshaller" />
 		<property name="defaultUri"
-			value="${openwis.data_services_base_url}/openwis-management-service-ejb/ExchangedDataStatistics" />
+			value="${openwis.data_services_base_url}/openwis-management-service-ejb/ExchangedDataStatistics/ExchangedDataStatistics?wsdl" />
 	</bean>
 
 	<bean id="replicatedDataStatisticsWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -167,7 +167,7 @@
 		<property name="marshaller" ref="replicatedDataStatisticsMarshaller" />
 		<property name="unmarshaller" ref="replicatedDataStatisticsMarshaller" />
 		<property name="defaultUri"
-			value="${openwis.data_services_base_url}/openwis-management-service-ejb/ReplicatedDataStatistics" />
+			value="${openwis.data_services_base_url}/openwis-management-service-ejb/ReplicatedDataStatistics/ReplicatedDataStatistics?wsdl" />
 	</bean>
 
 	<bean id="ingestedDataStatisticsWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -175,7 +175,7 @@
 		<property name="marshaller" ref="ingestedDataStatisticsMarshaller" />
 		<property name="unmarshaller" ref="ingestedDataStatisticsMarshaller" />
 		<property name="defaultUri"
-			value="${openwis.data_services_base_url}/openwis-management-service-ejb/IngestedDataStatistics" />
+			value="${openwis.data_services_base_url}/openwis-management-service-ejb/IngestedDataStatistics/IngestedDataStatistics?wsdl" />
 	</bean>
 
   <bean id="controlServiceWebServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
@@ -183,7 +183,7 @@
     <property name="marshaller" ref="controlservicemarshaller" />
     <property name="unmarshaller" ref="controlservicemarshaller" />
     <property name="defaultUri"
-              value="${openwis.data_services_base_url}/openwis-management-service-ejb/ControlService" />
+              value="${openwis.data_services_base_url}/openwis-management-service-ejb/ControlService/ControlService?wsdl" />
   </bean>
 
 	<!-- Common message factory -->
