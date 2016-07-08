@@ -10,7 +10,8 @@ class { openwis::portal_proxy:
 class { openwis::middleware::jboss_as:
 } ->
 class { openwis::middleware::tomcat:
-} ->
+}
+
 # database, data services & portal must be provisioned in correct order
 class { openwis::database:
 } ->

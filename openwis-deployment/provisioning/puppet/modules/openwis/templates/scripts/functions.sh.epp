@@ -62,10 +62,10 @@ function get_file() {
 	then
 		if [[] ${OVERWRITE} != "no-overwrite" || ! -f ${DEST_FILE} ]]
 		then
-			wget ${SOURCE_FILE} -O ${DEST_FILE}
+			as_root wget ${SOURCE_FILE} -O ${DEST_FILE}
 		fi
 	else
-		cp ${SOURCE_FILE} ${DEST_FILE}
+		as_root cp ${SOURCE_FILE} ${DEST_FILE}
 	fi
 }
 

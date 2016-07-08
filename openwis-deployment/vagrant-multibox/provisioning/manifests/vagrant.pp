@@ -2,6 +2,12 @@ Package {
 	allow_virtual => false,
 }
 
+# add the 'vagrant' user to the 'openwis' group
+# this is needed to allow the vagrant user to access openwis files
+user { "vagrant":
+	groups  => "openwis",
+}
+
 # ensure that the old provisioning working folders are removed
 file {["/vagrant/provisioning/config",
        "/vagrant/provisioning/downloads",
@@ -11,7 +17,8 @@ file {["/vagrant/provisioning/config",
 	force => true
 }
 
-# configure 'vagrant' user's 'bin' folder & shell script links
+# create symlinks to the deployment scripts in the vagrant user's bin folder
+# so that they can be executed manually
 file {"/home/vagrant/bin":
   ensure => directory,
   owner  => "vagrant",
@@ -42,12 +49,17 @@ host { "ow4dev-portal":
 	ip     => "192.168.54.103"
 }
 
-# clear logs & re-start services
+# clear down the logs folders & re-start the corresponding services (where appropriate)
+# this is needed as the logs get written to vagrant shared folders, but the services
+# get auto-started before the folders are mounted.
 clear_logs { "jboss-as":
 	logs_folders => ["/home/openwis/logs/jboss", "/home/openwis/logs/openwis"]
 } ->
 clear_logs { "tomcat":
 	logs_folders => ["/home/openwis/logs/tomcat"]
+}
+clear_logs { "httpd":
+	logs_folders => ["/home/openwis/logs/httpd"]
 }
 
 #===============================================================================
