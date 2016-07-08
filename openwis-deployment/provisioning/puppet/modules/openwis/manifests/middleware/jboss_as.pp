@@ -58,9 +58,9 @@ class openwis::middleware::jboss_as (
   file { "/etc/systemd/system/jboss-as.service":
     ensure  => file,
     content => dos2unix(epp("openwis/middleware/jboss/jboss-as.service", {
-        jboss_as_dir => $jboss_as_dir
-      })),
-      notify  => Exec["systemd-daemon-reload"]
+      jboss_as_dir => $jboss_as_dir
+    })),
+    notify  => Exec["systemd-daemon-reload"]
   } ->
   file { "/etc/jboss-as/jboss-as.conf":
     ensure  => file,

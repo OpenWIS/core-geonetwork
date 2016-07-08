@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "ow4dev"
 
   # Portal Web Access (will switch to Apache when configured)
-  config.vm.network "forwarded_port", guest: 8080, host: 10080, host_ip: "localhost"
+  config.vm.network "forwarded_port", guest: 80, host: 10080, host_ip: "localhost"
   # Portal remote debug
   config.vm.network "forwarded_port", guest: 8000, host: 18000, host_ip: "localhost"
   # JBoss Web Access (will be disabled once everything works)

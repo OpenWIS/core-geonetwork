@@ -113,7 +113,7 @@ The Puppet provisioning scripts also customize the OpenWIS application configura
 | `openwis::middleware::httpd`      | Installs & configures the Apache HTTPD service
 | `openwis::middleware::postgresql` | Installs & configures the PostgeSQL database
 | `openwis::middleware::tomcat`     | Installs & configures the Apache Tomcat service
-| `openwis::apache_proxy`           | Configures Apache HTTPD to be a reverse proxy for OpenWIS
+| `openwis::portal_proxy`           | Configures Apache HTTPD to be a reverse proxy for OpenWIS Portal
 | `openwis::database`               | Creates the base OpenWIS database, roles, tables etc.  Relies on the `create-db.sh` script.
 | `openwis::portal`                 | Deploys & configures the OpenWIS 4.x Portal.   Relies on the `deploy-portal.sh` script.
 

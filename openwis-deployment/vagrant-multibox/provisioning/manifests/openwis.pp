@@ -17,7 +17,7 @@ case $::hostname {
 
   # Portal Server
   "ow4dev-portal": {
-    class { openwis::apache_proxy:
+    class { openwis::portal_proxy:
     }
 
     class { openwis::portal:

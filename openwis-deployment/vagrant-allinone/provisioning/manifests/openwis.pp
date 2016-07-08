@@ -3,7 +3,7 @@ Package {
 }
 
 # Apache proxy has no hard dependencies
-class { openwis::apache_proxy:
+class { openwis::portal_proxy:
 }
 
 # JBoss must be installed before Tomcat to avoid port conflicts
