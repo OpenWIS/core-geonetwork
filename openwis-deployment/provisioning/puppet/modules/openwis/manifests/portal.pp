@@ -3,7 +3,7 @@ class openwis::portal (
 )
 {
   require openwis
-  require openwis::middleware::tomcat
+  include openwis::middleware::tomcat
 
   $scripts_dir                  = $openwis::scripts_dir
   $config_src_dir               = $openwis::config_src_dir
@@ -70,6 +70,7 @@ class openwis::portal (
   exec { "deploy-portal":
       command => "${scripts_dir}/deploy-portal.sh",
       creates => "/usr/share/tomcat/webapps/geonetwork",
-      require => File["${scripts_dir}/deploy-portal.sh"]
+      require => [Package[tomcat], File["${scripts_dir}/deploy-portal.sh"]],
+      notify  => Service[tomcat]
   }
 }

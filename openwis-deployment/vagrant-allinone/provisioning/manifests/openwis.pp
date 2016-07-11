@@ -2,8 +2,10 @@ Package {
 	allow_virtual => false,
 }
 
-# Apache proxy has no hard dependencies
+# Apache proxies have no hard dependencies
 class { openwis::portal_proxy:
+}
+class { openwis::staging_post_proxy:
 }
 
 # JBoss must be installed before Tomcat to avoid port conflicts
@@ -18,4 +20,8 @@ class { openwis::database:
 class { openwis::data_services:
 } ->
 class { openwis::portal:
+}
+
+# Staging Post has no hard dependencies
+class { openwis::staging_post:
 }

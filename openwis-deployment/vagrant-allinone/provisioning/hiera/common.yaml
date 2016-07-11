@@ -6,7 +6,9 @@ openwis::data_services::source_managementservice_ear: http://repository-openwis-
 openwis::data_services::source_dataservice_ear:       http://repository-openwis-association.forge.cloudbees.com/openwis/3.14.5/openwis-dataservice.ear
 openwis::data_services::source_jdbc_driver_jar:       http://repository-openwis-association.forge.cloudbees.com/private/binaries/postgresql-9.2-1004.jdbc41.jar
 openwis::portal::source_portal_war:                   /tmp/portal_workspace/web/target/geonetwork.war
+openwis::staging_post::source_staging_post_war:       http://repository-openwis-association.forge.cloudbees.com/openwis/3.14.5/stagingPost.war
 
-openwis::db_server_host_name:     ow4dev
-openwis::data_server_host_name:   ow4dev
-openwis::portal_server_host_name: ow4dev
+openwis::db_server_host_name:           ow4dev
+openwis::data_server_host_name:         ow4dev
+openwis::portal_server_host_name:       ow4dev
+openwis::staging_post_server_host_name: ow4dev

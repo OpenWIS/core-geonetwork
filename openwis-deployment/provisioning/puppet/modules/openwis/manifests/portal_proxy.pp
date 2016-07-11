@@ -10,5 +10,7 @@ class openwis::portal_proxy (
     content => epp("openwis/portal/apache/portal.conf", {
       portal_server_host_name => $portal_server_host_name
     }),
+    require => Package[httpd],
+    notify  => Service[httpd]
   }
 }

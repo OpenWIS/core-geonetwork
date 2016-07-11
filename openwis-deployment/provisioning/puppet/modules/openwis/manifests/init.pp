@@ -6,7 +6,8 @@ class openwis (
   $openwis_opt_dir              = "/var/opt/openwis",
   $data_services_base_url       = "http://localhost:8180",
   $management_services_base_url = "http://localhost:8180",
-  $portal_server_host_name
+  $portal_server_host_name,
+  $staging_post_server_host_name,
 )
 {
   $provisioning_root_dir = "/tmp/provisioning"
