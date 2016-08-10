@@ -17,12 +17,13 @@ as_postgres psql -c 'CREATE EXTENSION postgis_topology;'
 as_postgres psql -c 'CREATE EXTENSION ogr_fdw;'
 as_postgres psql -c 'CREATE EXTENSION pgrouting;'
 
-# install the OpenWIS citext extensions
-as_postgres psql -f ${CONFIG_SRC_DIR}/database/citext.sql
-
 # create the OpenWIS & GeoNetwork databases
 as_postgres createdb OpenWIS
 as_postgres createdb GeoNetwork
+
+# install the OpenWIS citext extensions
+as_postgres psql -f ${CONFIG_SRC_DIR}/database/citext.sql
+as_postgres psql -d OpenWIS -f ${CONFIG_SRC_DIR}/database/citext.sql
 
 # create the openwis user role
 as_postgres psql -f ${CONFIG_SRC_DIR}/database/openwis-roles.sql
